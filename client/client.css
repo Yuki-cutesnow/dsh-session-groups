@@ -1,0 +1,606 @@
+/* dsh-session-groups — sidebar section styles.
+ * Uses DSH theme variables where available and falls back to neutral values so
+ * the section still looks acceptable if a token disappears. */
+
+.dsg-section {
+  box-sizing: border-box;
+  /* Docked at the bottom of the sidebar workspace area. Absolute (not sticky)
+     because the host element's overflow/scroll behaviour differs between DSH
+     builds; the client sets `position: relative` on the host when needed. */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  max-height: 46%;
+  margin: 0;
+  padding: 0 var(--dsh-sidebar-inline-padding, 12px) 2px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-secondary, rgba(127, 127, 127, 0.95));
+  background: var(--dsw-specific-sidebar-fill, var(--dsw-alias-bg-skeleton, rgba(127, 127, 127, 0.06)));
+  border-top: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.22));
+  box-shadow: 0 -8px 18px rgba(0, 0, 0, 0.07);
+  user-select: none;
+  -webkit-user-select: none;
+  flex-shrink: 0;
+}
+
+/* draggable boundary between the workspace list and this section */
+.dsg-resizer {
+  position: relative;
+  flex-shrink: 0;
+  height: 10px;
+  margin: 0 -12px;
+  cursor: ns-resize;
+}
+
+.dsg-resizer::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 28px;
+  height: 2px;
+  margin-left: -14px;
+  border-radius: 2px;
+  background: var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.35));
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.dsg-section:hover .dsg-resizer::after,
+.dsg-resizing .dsg-resizer::after {
+  opacity: 1;
+}
+
+.dsg-resizing {
+  user-select: none;
+}
+
+/* scrollable body below the docked header */
+.dsg-section-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dsg-section *,
+.dsg-overlay * {
+  box-sizing: border-box;
+}
+
+.dsg-section button,
+.dsg-overlay button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.dsg-section button:focus-visible,
+.dsg-overlay button:focus-visible,
+.dsg-section input:focus-visible,
+.dsg-overlay select:focus-visible {
+  outline: 2px solid var(--dsw-focus-ring-color, var(--dsw-alias-link, #4c8dff));
+  outline-offset: 1px;
+}
+
+/* --------------------------------------------------------------- header */
+
+.dsg-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0 2px;
+  border-radius: var(--dsw-radius-sm, 6px);
+}
+
+.dsg-header:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.1));
+}
+
+.dsg-caret {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  font-size: 10px;
+  border-radius: var(--dsw-radius-xs, 4px);
+}
+
+.dsg-caret:hover {
+  color: var(--dsw-alias-label-primary, inherit);
+}
+
+.dsg-title {
+  color: var(--dsw-alias-label-primary, inherit);
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.dsg-count {
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+.dsg-spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dsg-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--dsw-alias-label-secondary, inherit);
+  font-size: 13px;
+  line-height: 1;
+  border-radius: var(--dsw-radius-xs, 4px);
+  opacity: 0.75;
+}
+
+.dsg-icon-btn:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.16));
+  color: var(--dsw-alias-label-primary, inherit);
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------- groups */
+
+.dsg-group {
+  margin-top: 2px;
+}
+
+.dsg-group-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 2px;
+  border-radius: var(--dsw-radius-sm, 6px);
+}
+
+.dsg-group-head:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.1));
+}
+
+/* a session is being dragged over this group */
+.dsg-group.dsg-drop-active > .dsg-group-head {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.12));
+  box-shadow: inset 0 0 0 1px var(--dsw-focus-ring-color, var(--dsw-alias-link, #4c8dff));
+}
+
+.dsg-group.dsg-drop-active > .dsg-group-body {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.06));
+  border-radius: var(--dsw-radius-sm, 6px);
+}
+
+.dsg-group-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--dsw-alias-label-primary, inherit);
+  font-size: 12px;
+}
+
+.dsg-group-count {
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.dsg-group-body {
+  padding: 1px 0 2px 4px;
+}
+
+.dsg-group-empty,
+.dsg-empty {
+  padding: 4px 6px 6px 20px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.dsg-empty {
+  padding: 6px 4px 6px 4px;
+}
+
+.dsg-empty-plus {
+  color: var(--dsw-alias-label-secondary, inherit);
+  font-weight: 600;
+  padding: 0 1px;
+}
+
+/* --------------------------------------------------------------- sessions */
+
+.dsg-session {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 4px 0 18px;
+  border-radius: var(--dsw-radius-xs, 4px);
+  cursor: pointer;
+  color: var(--dsw-alias-label-secondary, inherit);
+}
+
+.dsg-session:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.12));
+  color: var(--dsw-alias-label-primary, inherit);
+}
+
+.dsg-session[draggable="true"] {
+  cursor: grab;
+}
+
+.dsg-session-dragging {
+  opacity: 0.45;
+}
+
+.dsg-session:focus-visible {
+  outline: 2px solid var(--dsw-focus-ring-color, var(--dsw-alias-link, #4c8dff));
+  outline-offset: -1px;
+}
+
+.dsg-session[data-archived="true"] {
+  opacity: 0.6;
+}
+
+.dsg-session-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.dsg-session-ws {
+  flex-shrink: 0;
+  max-width: 76px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  opacity: 0.85;
+}
+
+.dsg-session-archived {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.3));
+  border-radius: 4px;
+  padding: 0 3px;
+  line-height: 14px;
+}
+
+.dsg-session-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--dsw-alias-label-tertiary, inherit);
+  border-radius: 4px;
+  opacity: 0;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.dsg-session:hover .dsg-session-remove,
+.dsg-session:focus-within .dsg-session-remove {
+  opacity: 0.7;
+}
+
+.dsg-session-remove:hover {
+  opacity: 1;
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.16));
+  color: var(--dsw-alias-state-error-primary, #e5484d);
+}
+
+/* ----------------------------------------------------------------- editor */
+
+.dsg-editor {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 2px;
+}
+
+.dsg-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 22px;
+  padding: 2px 6px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--dsw-alias-label-primary, inherit);
+  background: transparent;
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.35));
+  border-radius: var(--dsw-radius-xs, 4px);
+  outline: none;
+}
+
+.dsg-input:focus {
+  border-color: var(--dsw-alias-link, #4c8dff);
+}
+
+.dsg-input-rename {
+  flex: 1 1 auto;
+}
+
+.dsg-btn {
+  flex-shrink: 0;
+  height: 20px;
+  padding: 0 7px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--dsw-alias-label-secondary, inherit);
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.35));
+  border-radius: var(--dsw-radius-xs, 4px);
+}
+
+.dsg-btn:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.14));
+  color: var(--dsw-alias-label-primary, inherit);
+}
+
+.dsg-btn-primary {
+  color: var(--dsw-alias-label-primary, inherit);
+  border-color: var(--dsw-alias-link, rgba(76, 141, 255, 0.9));
+}
+
+/* ------------------------------------------------------------------- menu */
+
+.dsg-menu {
+  display: flex;
+  flex-direction: column;
+  margin: 2px 0 4px 20px;
+  padding: 4px;
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.25));
+  border-radius: var(--dsw-radius-sm, 6px);
+  background: var(--dsw-alias-bg-elevated, var(--dsw-alias-button-elevated-fill, rgba(40, 40, 40, 0.96)));
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.dsg-menu-item {
+  height: 24px;
+  padding: 0 8px;
+  text-align: left;
+  font-size: 12px;
+  color: var(--dsw-alias-label-primary, inherit);
+  border-radius: var(--dsw-radius-xs, 4px);
+}
+
+.dsg-menu-item:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.16));
+}
+
+.dsg-menu-danger {
+  color: var(--dsw-alias-state-error-primary, #e5484d);
+}
+
+/* ---------------------------------------------------------------- manager */
+
+.dsg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.34);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-primary, inherit);
+}
+
+.dsg-panel {
+  display: flex;
+  flex-direction: column;
+  width: 460px;
+  max-width: calc(100vw - 48px);
+  max-height: 72vh;
+  overflow: hidden;
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.25));
+  border-radius: var(--dsw-radius-lg, 10px);
+  background: var(--dsw-alias-bg-elevated, var(--dsw-alias-button-elevated-fill, #202020));
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+.dsg-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 12px 0 16px;
+  border-bottom: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.18));
+}
+
+.dsg-panel-title {
+  flex: 1 1 auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dsw-alias-label-primary, inherit);
+}
+
+.dsg-panel-hint {
+  padding: 8px 16px;
+  font-size: 11px;
+  line-height: 17px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  border-bottom: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.14));
+}
+
+.dsg-panel-body {
+  flex: 1 1 auto;
+  min-height: 60px;
+  overflow: auto;
+  padding: 2px 10px 6px;
+}
+
+.dsg-panel-loading,
+.dsg-panel-empty {
+  padding: 14px 6px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  font-size: 11px;
+}
+
+.dsg-panel-section-title {
+  margin: 10px 0 4px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dsg-panel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 6px;
+  border-radius: var(--dsw-radius-xs, 4px);
+}
+
+.dsg-panel-row:hover {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.12));
+}
+
+.dsg-panel-row-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--dsw-alias-label-primary, inherit);
+}
+
+.dsg-panel-row-archived {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+}
+
+.dsg-select {
+  flex-shrink: 0;
+  max-width: 150px;
+  height: 22px;
+  padding: 0 2px;
+  font: inherit;
+  font-size: 11px;
+  color: var(--dsw-alias-label-primary, inherit);
+  background: var(--dsw-alias-button-elevated-fill, rgba(127, 127, 127, 0.1));
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.3));
+  border-radius: var(--dsw-radius-xs, 4px);
+  outline: none;
+}
+
+.dsg-panel-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 16px;
+  border-top: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.18));
+}
+
+.dsg-panel-foot-text {
+  flex: 1 1 auto;
+  font-size: 11px;
+  color: var(--dsw-alias-label-tertiary, rgba(127, 127, 127, 0.9));
+}
+
+.dsg-panel-foot .dsg-btn {
+  height: 24px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+/* ------------------------------------------------------------------ toast */
+
+.dsg-toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  max-width: 340px;
+  padding: 7px 12px;
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--dsw-alias-label-primary, #fff);
+  background: var(--dsw-alias-button-elevated-fill, rgba(40, 40, 40, 0.95));
+  border: 1px solid var(--dsw-alias-border-l4, rgba(127, 127, 127, 0.3));
+  border-radius: var(--dsw-radius-sm, 6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------- drag insertion indicator */
+
+.dsg-drop-line {
+  position: relative;
+  flex-shrink: 0;
+  height: 2px;
+  margin: 3px 8px 3px 18px;
+  border-radius: 2px;
+  background: var(--dsw-alias-state-business-primary, #4c8dff);
+  box-shadow: 0 0 0 1px rgba(76, 141, 255, 0.28);
+  pointer-events: none;
+  animation: dsg-drop-pulse 0.9s ease-in-out infinite;
+}
+
+.dsg-drop-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dsw-alias-state-business-primary, #4c8dff);
+}
+
+@keyframes dsg-drop-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.dsg-group.dsg-drop-active > .dsg-group-head {
+  border-radius: var(--dsw-radius-xs, 4px);
+  background: var(--dsw-alias-interactive-bg-hover, rgba(127, 127, 127, 0.12));
+  box-shadow: inset 0 0 0 1px var(--dsw-focus-ring-color, rgba(76, 141, 255, 0.45));
+}
+
+.dsg-group.dsg-drop-active > .dsg-group-body {
+  border-radius: var(--dsw-radius-sm, 6px);
+  background: rgba(76, 141, 255, 0.06);
+}

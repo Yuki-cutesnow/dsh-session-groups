@@ -1,0 +1,5 @@
+# Bundle patch layer: inserts the dsh-session-groups host plugin.
+# The plugin resolves through the profile's node_modules (link/junction install).
+- insert:
+    - id: dsh-session-groups
+      name: dsh-session-groups

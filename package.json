@@ -1,0 +1,32 @@
+{
+  "name": "dsh-session-groups",
+  "version": "0.7.0",
+  "description": "Surface-only session grouping section for the DSH sidebar (no host-owned workspace moves).",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "lib",
+    "client",
+    "tools",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "session-groups"
+  ],
+  "license": "MIT"
+}

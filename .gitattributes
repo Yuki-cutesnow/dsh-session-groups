@@ -1,0 +1,3 @@
+# 统一用 LF：这个插件在 Windows / Linux / macOS 上都被直接加载，
+# 避免 core.autocrlf 把工作区文件改成 CRLF 造成 diff 噪音。
+* text=auto eol=lf

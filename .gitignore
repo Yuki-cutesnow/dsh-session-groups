@@ -1,0 +1,16 @@
+# 依赖与构建产物
+node_modules/
+
+# 开发时的 asar 提取目录（tools/extract-asar.mjs 的输出）
+.tmp-asar/
+
+# 插件自己产生的运行日志 / 安装器备份
+*.log
+*.tmp-*
+package.json.bak-*
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
