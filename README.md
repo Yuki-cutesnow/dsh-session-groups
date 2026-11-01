@@ -35,14 +35,14 @@
 ## 从 GitHub / 插件页安装（推荐）
 
 本插件是一个自带 `cordis.patch.yml` 的 cordis「组合包（bundle）」，**无需构建、没有 npm 依赖**，
+仓库根目录本身就是插件包（`package.json`、`cordis.patch.yml`、`lib/`、`client/` 都在根目录），
 所以可以直接从 Git 仓库安装：
 
-1. 把仓库根目录整理成插件包（`package.json`、`cordis.patch.yml`、`lib/`、`client/` 都直接位于根目录）并推送到 GitHub。
-2. 打开 DeepSeek Harness 桌面端 → 侧栏「插件」页 → 「添加插件」（或标题栏箭头菜单里的「安装第三方插件」），
-   粘贴仓库地址，例如 `https://github.com/<your-name>/dsh-session-groups`，然后按提示安装。
-   - 也可以用 CLI：`dsh plugin --profile desktop add github:<your-name>/dsh-session-groups`
-3. 安装成功后如果出现「立即启用」，点它（组合包会被追加到 profile 的 `dsh.profile.bundles`）。
-4. **完全退出并重新打开 DeepSeek Harness 一次**——桌面版的 index 注入表只在宿主启动时收集，
+1. 打开 DeepSeek Harness 桌面端 → 侧栏「插件」页 → 「添加插件」（或标题栏箭头菜单里的「安装第三方插件」），
+   粘贴仓库地址 `https://github.com/Yuki-cutesnow/dsh-session-groups`，然后按提示安装。
+   - 也可以用 CLI：`dsh plugin --profile desktop add github:Yuki-cutesnow/dsh-session-groups`
+2. 安装成功后如果出现「立即启用」，点它（组合包会被追加到 profile 的 `dsh.profile.bundles`）。
+3. **完全退出并重新打开 DeepSeek Harness 一次**——桌面版的 index 注入表只在宿主启动时收集，
    不重启的话侧栏不会出现「分组」分区。
 
 注意事项：
